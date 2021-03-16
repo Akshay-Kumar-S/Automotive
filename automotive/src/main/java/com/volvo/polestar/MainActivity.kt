@@ -1,21 +1,33 @@
 package com.volvo.polestar
 
+import android.annotation.SuppressLint
 import android.car.Car
 import android.car.hardware.property.CarPropertyManager
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainView {
+    private var TAG = "akshay"
     private lateinit var car: Car
     private lateinit var vehicleProperties: VehicleProperties
-    private var TAG = "akshay"
+
+    private lateinit var speedView: TextView
+    private lateinit var deviceBrand: TextView
+    private lateinit var deviceManufacture: TextView
+    private lateinit var deviceModel: TextView
+    private lateinit var deviceVersion: TextView
+    private lateinit var deviceUID: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initCar()
+        initUI()
+        updateUI()
         Log.e(TAG, "onCreate: CarInfo")
         CarUtil.getCarInfo(car)
         Log.e(TAG, "onCreate: getCarProperties")
@@ -23,11 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         AndroidUtil.getAllInstalledApps(this)
         AndroidUtil.getLocation(this)
-        AndroidUtil.getDeviceBrand()
-        AndroidUtil.getDeviceManufacture()
-        AndroidUtil.getDeviceModel()
-        AndroidUtil.getDeviceVersion()
-        AndroidUtil.getDeviceUuid(this)
     }
 
     private fun initCar() {
@@ -40,7 +47,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         car = Car.createCar(this)
-        vehicleProperties = VehicleProperties()
+        vehicleProperties = VehicleProperties(this)
+    }
+
+    private fun initUI() {
+        speedView = findViewById(R.id.speed_view)
+        deviceBrand = findViewById(R.id.device_brand)
+        deviceManufacture = findViewById(R.id.device_manufacture)
+        deviceModel = findViewById(R.id.device_model)
+        deviceVersion = findViewById(R.id.device_version)
+        deviceUID = findViewById(R.id.device_uid)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateUI() {
+        deviceBrand.text = "Brand: "+AndroidUtil.getDeviceBrand()
+        deviceManufacture.text = "Manufacture: "+AndroidUtil.getDeviceManufacture()
+        deviceModel.text = "Model: "+AndroidUtil.getDeviceModel()
+        deviceVersion.text = "Version: "+AndroidUtil.getDeviceVersion()
+        deviceUID.text = "UID: "+AndroidUtil.getDeviceUuid(this)
     }
 
     override fun onDestroy() {
@@ -50,4 +75,8 @@ class MainActivity : AppCompatActivity() {
         pptMgr.unregisterCallback(vehicleProperties)
     }
 
+    @SuppressLint("SetTextI18n")
+    override fun updateSpeed(value: Float) {
+        speedView.text = "SPEED : " + (value * 18 / 5).toInt().toString() + " kmph"
+    }
 }

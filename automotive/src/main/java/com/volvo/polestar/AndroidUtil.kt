@@ -9,10 +9,8 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 
 
 object AndroidUtil {
@@ -51,25 +49,24 @@ object AndroidUtil {
         }
     }
 
-    fun getDeviceBrand() {
-        Log.d(TAG, "getDeviceType: " + Build.BRAND)
+    fun getDeviceBrand() : String {
+        return Build.BRAND
     }
 
-    fun getDeviceManufacture() {
-        Log.d(TAG, "getDeviceManufacture: " + Build.MANUFACTURER)
+    fun getDeviceManufacture() : String {
+        return Build.MANUFACTURER
     }
 
-    fun getDeviceModel() {
-        Log.d(TAG, "getDeviceName: " + Build.MODEL)
+    fun getDeviceModel() : String{
+        return Build.MODEL
     }
 
-    fun getDeviceVersion() {
-        Log.d(TAG, "getDeviceVersion: " + Build.VERSION.SDK_INT)
+    fun getDeviceVersion() : String {
+        return Build.VERSION.SDK_INT.toString()
     }
 
     @SuppressLint("HardwareIds")
-    fun getDeviceUuid(context: Context) {
-        val id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        Log.d(TAG, "getDeviceUuid: $id")
+    fun getDeviceUuid(context: Context) : String{
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }
