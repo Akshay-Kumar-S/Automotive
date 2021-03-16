@@ -113,9 +113,7 @@ object CarUtil {
 
         pptMgr.registerCallback(iCallback, VehiclePropertyIds.GEAR_SELECTION, SENSOR_RATE_NORMAL)
         pptMgr.registerCallback(
-            iCallback,
-            VehiclePropertyIds.PERF_VEHICLE_SPEED,
-            SENSOR_RATE_FASTEST
+            iCallback, VehiclePropertyIds.PERF_VEHICLE_SPEED, SENSOR_RATE_FASTEST
         )
         pptMgr.registerCallback(iCallback, VehiclePropertyIds.IGNITION_STATE, SENSOR_RATE_FASTEST)
     }

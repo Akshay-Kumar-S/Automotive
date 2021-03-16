@@ -5,7 +5,6 @@ import android.car.Car
 import android.car.hardware.property.CarPropertyManager
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.volvo.polestar.interfaces.MainView
@@ -32,6 +31,7 @@ class MainActivity : AppCompatActivity(), MainView {
     private lateinit var batteryCapacity: TextView
     private lateinit var fuelType: TextView
     private lateinit var connectorTypes: TextView
+    private lateinit var locationView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,23 +41,17 @@ class MainActivity : AppCompatActivity(), MainView {
         initUI()
         updateUI()
 
-        Log.e(TAG, "onCreate: CarInfo")
-        CarUtil.getCarInfo(car)
-        Log.e(TAG, "onCreate: getCarProperties")
         CarUtil.getCarProperties(car, vehicleProperties)
 
         AndroidUtil.getAllInstalledApps(this)
-        AndroidUtil.getLocation(this)
     }
 
     private fun initCar() {
-        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
+        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE))
             return
-        }
 
-        if (::car.isInitialized) {
+        if (::car.isInitialized)
             return
-        }
 
         car = Car.createCar(this)
         vehicleProperties = VehicleProperties(this)
@@ -80,6 +74,8 @@ class MainActivity : AppCompatActivity(), MainView {
         fuelCapacity = findViewById(R.id.car_fuel_capacity)
         batteryCapacity = findViewById(R.id.car_battery_capacity)
         connectorTypes = findViewById(R.id.car_ev_connectors)
+
+        locationView = findViewById(R.id.car_location)
     }
 
     @SuppressLint("SetTextI18n")
@@ -97,6 +93,10 @@ class MainActivity : AppCompatActivity(), MainView {
         fuelCapacity.text = "Fuel Capacity: " + carInfo.fuelCapacity.toString() + " ml"
         batteryCapacity.text = "Battery Capacity: " + carInfo.evBatteryCapacity.toString()
         connectorTypes.text = "Ev Connectors: " + carInfo.evConnectorTypes.toString()
+
+        val location = AndroidUtil.getLocation(this)
+        locationView.text =
+            "Location: latitude: ${location?.latitude}, longitude: ${location?.longitude}, accuracy: ${location?.accuracy}"
     }
 
     override fun onDestroy() {

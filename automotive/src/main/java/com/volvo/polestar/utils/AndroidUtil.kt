@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
@@ -29,7 +30,7 @@ object AndroidUtil {
         }
     }
 
-    fun getLocation(context: Context) {
+    fun getLocation(context: Context) : Location? {
         val locationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
         if (ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.ACCESS_FINE_LOCATION
@@ -38,15 +39,9 @@ object AndroidUtil {
                 context, Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.d(TAG, "getLocation:have permission ")
-            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (location != null) {
-                val lat: Double = location.latitude
-                val long: Double = location.longitude
-                val acc: Float = location.accuracy
-                Log.d(TAG, "getLocation: lat: $lat, long: $long, accuracy: $acc")
-            }
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         }
+        return null
     }
 
     fun getDeviceBrand() : String {
