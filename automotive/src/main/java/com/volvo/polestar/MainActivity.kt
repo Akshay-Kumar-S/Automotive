@@ -4,6 +4,7 @@ import android.car.Car
 import android.car.hardware.property.CarPropertyManager
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -15,13 +16,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initCar()
-        /* Log.e(TAG, "onCreate: CarInfo")
-         CarUtil.getCarInfo(car)
-         Log.e(TAG, "onCreate: ConnectionType")
-         CarUtil.getCarConnectionType(car)
-         Log.e(TAG, "onCreate: getCarProperties")
-        CarUtil.getCarProperties(car, vehicleProperties)*/
+        Log.e(TAG, "onCreate: CarInfo")
+        CarUtil.getCarInfo(car)
+        Log.e(TAG, "onCreate: getCarProperties")
+        CarUtil.getCarProperties(car, vehicleProperties)
+
         AndroidUtil.getAllInstalledApps(this)
+        AndroidUtil.getLocation(this)
+        AndroidUtil.getDeviceBrand()
+        AndroidUtil.getDeviceManufacture()
+        AndroidUtil.getDeviceModel()
+        AndroidUtil.getDeviceVersion()
+        AndroidUtil.getDeviceUuid(this)
     }
 
     private fun initCar() {
