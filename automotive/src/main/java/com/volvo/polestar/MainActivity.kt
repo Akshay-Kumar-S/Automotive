@@ -19,8 +19,9 @@ class MainActivity : AppCompatActivity() {
          CarUtil.getCarInfo(car)
          Log.e(TAG, "onCreate: ConnectionType")
          CarUtil.getCarConnectionType(car)
-         Log.e(TAG, "onCreate: getCarProperties")*/
-        CarUtil.getCarProperties(car, vehicleProperties)
+         Log.e(TAG, "onCreate: getCarProperties")
+        CarUtil.getCarProperties(car, vehicleProperties)*/
+        AndroidUtil.getAllInstalledApps(this)
     }
 
     private fun initCar() {
