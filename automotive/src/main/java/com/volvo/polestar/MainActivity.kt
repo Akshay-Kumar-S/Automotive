@@ -3,10 +3,8 @@ package com.volvo.polestar
 import android.annotation.SuppressLint
 import android.car.Car
 import android.car.hardware.property.CarPropertyManager
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.volvo.polestar.interfaces.MainView
@@ -34,6 +32,7 @@ class MainActivity : AppCompatActivity(), MainView {
     private lateinit var fuelType: TextView
     private lateinit var connectorTypes: TextView
     private lateinit var locationView: TextView
+    private lateinit var appsView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +42,6 @@ class MainActivity : AppCompatActivity(), MainView {
         initUI()
         updateUI()
         CarUtil.getCarProperties(car, vehicleProperties)
-
-        //AndroidUtil.getAllInstalledApps(this)
     }
 
     private fun initCar() {
@@ -77,6 +74,7 @@ class MainActivity : AppCompatActivity(), MainView {
         connectorTypes = findViewById(R.id.car_ev_connectors)
 
         locationView = findViewById(R.id.car_location)
+        appsView = findViewById(R.id.apps_installed)
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,6 +96,8 @@ class MainActivity : AppCompatActivity(), MainView {
         val location = AndroidUtil.getLocation(this)
         locationView.text =
             "Location: latitude: ${location?.latitude}, longitude: ${location?.longitude}, accuracy: ${location?.accuracy}"
+
+        appsView.text = AndroidUtil.getAllInstalledApps(this)
     }
 
     override fun onDestroy() {
@@ -120,10 +120,5 @@ class MainActivity : AppCompatActivity(), MainView {
     @SuppressLint("SetTextI18n")
     override fun updateIgnitionState(value: String) {
         ignitionView.text = "IGNITION STATE: $value"
-    }
-
-    fun showApps(view: View) {
-        val intent = Intent(this, AppsActivity::class.java)
-        //startActivity(intent)
     }
 }

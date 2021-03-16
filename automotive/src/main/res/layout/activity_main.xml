@@ -133,22 +133,13 @@
             app:layout_constraintTop_toBottomOf="@id/car_ev_connectors"
             android:textSize="28sp"/>
 
-        <!--<Button
-            android:id="@+id/applications"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="@string/applications"
-            android:onClick="showApps"
-            app:layout_constraintTop_toBottomOf="@id/car_location"
-            android:textSize="28sp"
-            tools:ignore="MissingConstraints" />-->
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragment_container_view"
+        <TextView
+            android:id="@+id/apps_installed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/car_location"/>
+            android:layout_margin="15dp"
+            app:layout_constraintTop_toBottomOf="@id/car_location"
+            android:textSize="28sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
