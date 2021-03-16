@@ -1,11 +1,9 @@
-package com.volvo.polestar
+package com.volvo.polestar.utils
 
-import android.app.Service
 import android.car.Car
 import android.car.CarInfoManager
+import android.car.VehicleGear
 import android.car.VehiclePropertyIds
-import android.car.content.pm.CarPackageManager
-import android.car.hardware.CarPropertyValue
 import android.car.hardware.CarSensorEvent
 import android.car.hardware.property.CarPropertyManager
 import android.car.hardware.property.CarPropertyManager.SENSOR_RATE_FASTEST
@@ -70,11 +68,47 @@ object CarUtil {
         }
     }
 
+    fun getGear(gear: Int): String {
+        return when (gear) {
+            VehicleGear.GEAR_PARK -> "PARK"
+            VehicleGear.GEAR_DRIVE -> "DRIVE"
+            VehicleGear.GEAR_NEUTRAL -> "NEUTRAL"
+            VehicleGear.GEAR_REVERSE -> "REVERSE"
+            VehicleGear.GEAR_FIRST -> "1"
+            VehicleGear.GEAR_SECOND -> "2"
+            VehicleGear.GEAR_THIRD -> "3"
+            VehicleGear.GEAR_FOURTH -> "4"
+            VehicleGear.GEAR_FIFTH -> "5"
+            VehicleGear.GEAR_SIXTH -> "6"
+            VehicleGear.GEAR_SEVENTH -> "7"
+            VehicleGear.GEAR_EIGHTH -> "8"
+            VehicleGear.GEAR_NINTH -> "9"
+            else -> "Unknown"
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    public fun getIgnitionState(state: Int): String {
+        return when (state) {
+            CarSensorEvent.IGNITION_STATE_UNDEFINED -> "UNDEFINED"
+            CarSensorEvent.IGNITION_STATE_LOCK -> "LOCK"
+            CarSensorEvent.IGNITION_STATE_OFF -> "OFF"
+            CarSensorEvent.IGNITION_STATE_ACC -> "ACC"
+            CarSensorEvent.IGNITION_STATE_ON -> "ON"
+            CarSensorEvent.IGNITION_STATE_START -> "START"
+            else -> "Unknown"
+        }
+    }
+
     fun getCarProperties(car: Car, iCallback: CarPropertyManager.CarPropertyEventCallback) {
         val pptMgr = car.getCarManager(Car.PROPERTY_SERVICE) as CarPropertyManager
 
-        pptMgr.registerCallback(iCallback, VehiclePropertyIds.GEAR_SELECTION ,SENSOR_RATE_NORMAL)
-        pptMgr.registerCallback(iCallback, VehiclePropertyIds.PERF_VEHICLE_SPEED , SENSOR_RATE_FASTEST)
-        pptMgr.registerCallback(iCallback, VehiclePropertyIds.IGNITION_STATE , SENSOR_RATE_FASTEST)
+        pptMgr.registerCallback(iCallback, VehiclePropertyIds.GEAR_SELECTION, SENSOR_RATE_NORMAL)
+        pptMgr.registerCallback(
+            iCallback,
+            VehiclePropertyIds.PERF_VEHICLE_SPEED,
+            SENSOR_RATE_FASTEST
+        )
+        pptMgr.registerCallback(iCallback, VehiclePropertyIds.IGNITION_STATE, SENSOR_RATE_FASTEST)
     }
 }

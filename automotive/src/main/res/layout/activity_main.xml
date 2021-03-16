@@ -61,6 +61,22 @@
             app:layout_constraintTop_toBottomOf="@id/device_uid"
             android:textSize="28sp"/>
 
+        <TextView
+            android:id="@+id/gear_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:layout_constraintTop_toBottomOf="@id/speed_view"
+            android:textSize="28sp"/>
+
+        <TextView
+            android:id="@+id/ignition_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            app:layout_constraintTop_toBottomOf="@id/gear_view"
+            android:textSize="28sp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

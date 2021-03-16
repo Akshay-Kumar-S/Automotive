@@ -1,4 +1,4 @@
-package com.volvo.polestar
+package com.volvo.polestar.utils
 
 import android.Manifest
 import android.annotation.SuppressLint
