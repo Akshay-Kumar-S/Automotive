@@ -26,6 +26,12 @@ class MainActivity : AppCompatActivity(), MainView {
     private lateinit var speedView: TextView
     private lateinit var gearView: TextView
     private lateinit var ignitionView: TextView
+    private lateinit var carManufacture: TextView
+    private lateinit var carModel: TextView
+    private lateinit var fuelCapacity: TextView
+    private lateinit var batteryCapacity: TextView
+    private lateinit var fuelType: TextView
+    private lateinit var connectorTypes: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +40,7 @@ class MainActivity : AppCompatActivity(), MainView {
         initCar()
         initUI()
         updateUI()
+
         Log.e(TAG, "onCreate: CarInfo")
         CarUtil.getCarInfo(car)
         Log.e(TAG, "onCreate: getCarProperties")
@@ -62,18 +69,34 @@ class MainActivity : AppCompatActivity(), MainView {
         deviceModel = findViewById(R.id.device_model)
         deviceVersion = findViewById(R.id.device_version)
         deviceUID = findViewById(R.id.device_uid)
+
         speedView = findViewById(R.id.speed_view)
         gearView = findViewById(R.id.gear_view)
         ignitionView = findViewById(R.id.ignition_view)
+
+        carManufacture = findViewById(R.id.car_manufacture)
+        carModel = findViewById(R.id.car_model)
+        fuelType = findViewById(R.id.car_fuel_type)
+        fuelCapacity = findViewById(R.id.car_fuel_capacity)
+        batteryCapacity = findViewById(R.id.car_battery_capacity)
+        connectorTypes = findViewById(R.id.car_ev_connectors)
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
-        deviceBrand.text = "Brand: "+ AndroidUtil.getDeviceBrand()
-        deviceManufacture.text = "Manufacture: "+ AndroidUtil.getDeviceManufacture()
-        deviceModel.text = "Model: "+ AndroidUtil.getDeviceModel()
-        deviceVersion.text = "Version: "+ AndroidUtil.getDeviceVersion()
-        deviceUID.text = "UID: "+ AndroidUtil.getDeviceUuid(this)
+        deviceBrand.text = "Brand: " + AndroidUtil.getDeviceBrand()
+        deviceManufacture.text = "Manufacture: " + AndroidUtil.getDeviceManufacture()
+        deviceModel.text = "Model: " + AndroidUtil.getDeviceModel()
+        deviceVersion.text = "Version: " + AndroidUtil.getDeviceVersion()
+        deviceUID.text = "UID: " + AndroidUtil.getDeviceUuid(this)
+
+        val carInfo = CarUtil.getCarInfo(car)
+        carManufacture.text = "Car Manufacture: " + carInfo.manufacturer
+        carModel.text = "Car Model: " + carInfo.model
+        fuelType.text = "Fuel Type: " + carInfo.fuelType
+        fuelCapacity.text = "Fuel Capacity: " + carInfo.fuelCapacity.toString() + " ml"
+        batteryCapacity.text = "Battery Capacity: " + carInfo.evBatteryCapacity.toString()
+        connectorTypes.text = "Ev Connectors: " + carInfo.evConnectorTypes.toString()
     }
 
     override fun onDestroy() {
@@ -85,16 +108,16 @@ class MainActivity : AppCompatActivity(), MainView {
 
     @SuppressLint("SetTextI18n")
     override fun updateSpeed(value: Float) {
-        speedView.text = "SPEED : " + (value * 18 / 5).toInt().toString() + " kmph"
+        speedView.text = "SPEED: " + (value * 18 / 5).toInt().toString() + " kmph"
     }
 
     @SuppressLint("SetTextI18n")
     override fun updateGear(value: String) {
-        gearView.text = "GEAR : $value"
+        gearView.text = "GEAR: $value"
     }
 
     @SuppressLint("SetTextI18n")
     override fun updateIgnitionState(value: String) {
-        ignitionView.text = "IGNITION STATE : $value"
+        ignitionView.text = "IGNITION STATE: $value"
     }
 }

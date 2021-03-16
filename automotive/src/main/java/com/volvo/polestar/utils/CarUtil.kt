@@ -9,63 +9,71 @@ import android.car.hardware.property.CarPropertyManager
 import android.car.hardware.property.CarPropertyManager.SENSOR_RATE_FASTEST
 import android.car.hardware.property.CarPropertyManager.SENSOR_RATE_NORMAL
 import android.util.Log
+import com.volvo.polestar.models.CarInfo
 
 
 object CarUtil {
     const val TAG = "akshay"
 
-    fun getCarInfo(car: Car) {
+    fun getCarInfo(car: Car): CarInfo {
         val info = car.getCarManager(Car.INFO_SERVICE) as CarInfoManager
         Log.d(TAG, "getCarInfo:manufacturer " + info.manufacturer)
         Log.d(TAG, "getCarInfo:model " + info.model)
         //Log.d(TAG, "getCarInfo:modelYearInInteger " + info.modelYearInInteger)
         Log.d(TAG, "getCarInfo:fuelCapacity " + info.fuelCapacity)
-        listFuelTypes(info.fuelTypes)
         Log.d(TAG, "getCarInfo:evBatteryCapacity " + info.evBatteryCapacity)
-        listEvConnectorTypes(info.evConnectorTypes)
         //Log.d(TAG, "getCarInfo:driverSeat " + info.driverSeat)
         //Log.d(TAG, "getCarInfo:evPortLocation " + info.evPortLocation)
         //Log.d(TAG, "getCarInfo:fuelDoorLocation " + info.fuelDoorLocation)
+        val carInfo =
+            CarInfo(info.manufacturer, info.model, info.fuelCapacity, info.evBatteryCapacity)
+        carInfo.fuelType = getFuelTypes(info.fuelTypes)
+        carInfo.evConnectorTypes = getEvConnectorTypes(info.evConnectorTypes)
+
+        return carInfo
     }
 
-    private fun listFuelTypes(list: IntArray) {
+    private fun getFuelTypes(list: IntArray): String {
         for (i in list) {
-            when (i) {
-                1 -> Log.d(TAG, "fuelType: fuelTypeFuelType.UNLEADED")
-                2 -> Log.d(TAG, "fuelType: fuelTypeFuelType.LEADED")
-                3 -> Log.d(TAG, "fuelType: fuelTypeFuelType.DIESEL_1")
-                4 -> Log.d(TAG, "fuelType: fuelTypeFuelType.DIESEL_2")
-                5 -> Log.d(TAG, "fuelType: fuelTypeFuelType.BIODIESEL")
-                6 -> Log.d(TAG, "fuelType: fuelTypeFuelType.E85")
-                7 -> Log.d(TAG, "fuelType: fuelTypeFuelType.LPG")
-                8 -> Log.d(TAG, "fuelType: fuelTypeFuelType.CNG")
-                9 -> Log.d(TAG, "fuelType: fuelTypeFuelType.LNG")
-                10 -> Log.d(TAG, "fuelType: fuelTypeFuelType.ELECTRIC")
-                11 -> Log.d(TAG, "fuelType: fuelTypeFuelType.HYDROGEN")
-                12 -> Log.d(TAG, "fuelType: fuelTypeFuelType.OTHER")
-                else -> Log.d(TAG, "fuelType: fuelTypeFuelType.UNKNOWN")
+            return when (i) {
+                1 -> "UNLEADED"
+                2 -> "LEADED"
+                3 -> "DIESEL_1"
+                4 -> "DIESEL_2"
+                5 -> "BIODIESEL"
+                6 -> "E85"
+                7 -> "LPG"
+                8 -> "CNG"
+                9 -> "LNG"
+                10 -> "ELECTRIC"
+                11 -> "HYDROGEN"
+                12 -> "OTHER"
+                else -> "UNKNOWN"
             }
         }
+        return "UNKNOWN"
     }
 
-    private fun listEvConnectorTypes(list: IntArray) {
+    private fun getEvConnectorTypes(list: IntArray): ArrayList<String> {
+        val typeList: ArrayList<String> = ArrayList()
         for (i in list) {
             when (i) {
-                1 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.J1772")
-                2 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.MENNEKES")
-                3 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.SCAME")
-                4 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.CHADEMO")
-                5 -> Log.d(TAG, "connectorType: fuelType EvConnectorType.COMBO_1")
-                6 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.COMBO_2")
-                7 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.TESLA_ROADSTER")
-                8 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.TESLA_HPWC")
-                9 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.TESLA_SUPERCHARGER")
-                10 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.GBT")
-                11 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.GBT_DC")
-                101 -> Log.d(TAG, "connectorType: fuelTypeEvConnectorType.OTHER")
-                else -> Log.d(TAG, "connectorType: fuelType EvConnectorType.UNKNOWN")
+                1 -> typeList.add("J1772")
+                2 -> typeList.add("MENNEKES")
+                3 -> typeList.add("SCAME")
+                4 -> typeList.add("CHADEMO")
+                5 -> typeList.add("COMBO_1")
+                6 -> typeList.add("COMBO_2")
+                7 -> typeList.add("TESLA_ROADSTER")
+                8 -> typeList.add("TESLA_HPWC")
+                9 -> typeList.add("TESLA_SUPERCHARGER")
+                10 -> typeList.add("GBT")
+                11 -> typeList.add("GBT_DC")
+                101 -> typeList.add("OTHER")
+                else -> typeList.add("UNKNOWN")
             }
         }
+        return typeList
     }
 
     fun getGear(gear: Int): String {
