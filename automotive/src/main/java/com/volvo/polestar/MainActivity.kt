@@ -3,8 +3,10 @@ package com.volvo.polestar
 import android.annotation.SuppressLint
 import android.car.Car
 import android.car.hardware.property.CarPropertyManager
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.volvo.polestar.interfaces.MainView
@@ -40,10 +42,9 @@ class MainActivity : AppCompatActivity(), MainView {
         initCar()
         initUI()
         updateUI()
-
         CarUtil.getCarProperties(car, vehicleProperties)
 
-        AndroidUtil.getAllInstalledApps(this)
+        //AndroidUtil.getAllInstalledApps(this)
     }
 
     private fun initCar() {
@@ -119,5 +120,10 @@ class MainActivity : AppCompatActivity(), MainView {
     @SuppressLint("SetTextI18n")
     override fun updateIgnitionState(value: String) {
         ignitionView.text = "IGNITION STATE: $value"
+    }
+
+    fun showApps(view: View) {
+        val intent = Intent(this, AppsActivity::class.java)
+        //startActivity(intent)
     }
 }
