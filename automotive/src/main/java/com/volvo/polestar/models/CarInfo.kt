@@ -1,6 +1,7 @@
 package com.volvo.polestar.models
 
 data class CarInfo(
+
     var manufacturer : String,
     var model : String?,
     var fuelCapacity : Float,
