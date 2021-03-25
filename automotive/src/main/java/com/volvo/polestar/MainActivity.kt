@@ -3,14 +3,20 @@ package com.volvo.polestar
 import android.annotation.SuppressLint
 import android.car.Car
 import android.car.hardware.property.CarPropertyManager
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.volvo.polestar.interfaces.MainView
 import com.volvo.polestar.receivers.VehicleProperties
+import com.volvo.polestar.services.AppService
 import com.volvo.polestar.utils.AndroidUtil
 import com.volvo.polestar.utils.CarUtil
+import com.volvo.polestar.utils.Network
 
 class MainActivity : AppCompatActivity(), MainView {
     private var TAG = "akshay"
@@ -42,6 +48,8 @@ class MainActivity : AppCompatActivity(), MainView {
         initUI()
         updateUI()
         CarUtil.getCarProperties(car, vehicleProperties)
+        //startService()
+        Log.d(TAG, "onCreate: wifi " + Network.getWifiSSID(this))
     }
 
     private fun initCar() {
@@ -75,7 +83,22 @@ class MainActivity : AppCompatActivity(), MainView {
 
         locationView = findViewById(R.id.car_location)
         appsView = findViewById(R.id.apps_installed)
+        hideAndroidApi()
     }
+
+    private fun hideAndroidApi() {
+        speedView.visibility = View.GONE
+        gearView.visibility = View.GONE
+        ignitionView.visibility = View.GONE
+
+        carManufacture.visibility = View.GONE
+        carModel.visibility = View.GONE
+        fuelType.visibility = View.GONE
+        fuelCapacity.visibility = View.GONE
+        batteryCapacity.visibility = View.GONE
+        connectorTypes.visibility = View.GONE
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
@@ -120,5 +143,10 @@ class MainActivity : AppCompatActivity(), MainView {
     @SuppressLint("SetTextI18n")
     override fun updateIgnitionState(value: String) {
         ignitionView.text = "IGNITION STATE: $value"
+    }
+
+    private fun startService() {
+        val intent = Intent(this, AppService::class.java)
+        ContextCompat.startForegroundService(this, intent)
     }
 }
