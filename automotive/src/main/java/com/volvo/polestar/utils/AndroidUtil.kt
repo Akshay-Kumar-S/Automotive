@@ -10,7 +10,6 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.ActivityCompat
 
 
@@ -21,17 +20,16 @@ object AndroidUtil {
     fun getAllInstalledApps(context: Context): String {
         val pm = context.packageManager
         val apps = pm.getInstalledApplications(0)
-        var appsList = "Installed Applications \n"
+        var appsList = "Installed Applications \nSystem Apps\n"
+        var userApp = "\nUser Apps\n"
         for (app in apps) {
-            appsList += app.packageName + "\n"
-            appsList += getAppType(app) + "\n"
-            /*Log.d(TAG, "getAllInstalledApps:app name: " + app.packageName)
-            Log.d(
-                TAG,
-                "getAllInstalledApps:system app " + (app.flags and ApplicationInfo.FLAG_SYSTEM != 0)
-            )*/
+            if (getAppType(app) == "System") {
+                appsList += app.packageName + "\n"
+            } else {
+                userApp += app.packageName + "\n"
+            }
         }
-        return appsList
+        return appsList + userApp
     }
 
     private fun getAppType(applicationInfo: ApplicationInfo): String {
